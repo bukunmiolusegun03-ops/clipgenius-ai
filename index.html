@@ -5,31 +5,195 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#090914">
-<title>ClipGenius AI</title>
+
+<title>ClipGenius AI - Smart Video Clipper</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#090914;color:white;font-family:Arial,sans-serif;min-height:100vh}
-header{padding:22px 7%;border-bottom:1px solid #25253a;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:23px;font-weight:bold}
-.logo span,h1 span{color:#a17bff}
-.hero{text-align:center;padding:85px 20px 45px}
-.tag{display:inline-block;padding:10px 17px;border-radius:30px;background:#211735;color:#c3aaff;margin-bottom:25px}
-h1{font-size:clamp(38px,7vw,65px);margin-bottom:20px}
-.subtitle{color:#aaaabe;max-width:540px;margin:auto;line-height:1.7}
-.workspace{max-width:720px;margin:35px auto;padding:30px;background:#141423;border:1px solid #292941;border-radius:18px}
-label{display:block;margin-bottom:13px;font-weight:bold}
-input{width:100%;padding:17px;border:1px solid #35354e;border-radius:10px;background:#090914;color:white;outline:none;font-size:15px;margin-bottom:18px}
-input:focus{border-color:#956cff}
-button{width:100%;padding:17px;border:0;border-radius:10px;color:white;background:linear-gradient(90deg,#7046e8,#a05cff);font-size:17px;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.6;cursor:wait}
-#status{color:#b89cff;margin-top:18px;text-align:center;line-height:1.6}
-.features{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;max-width:900px;margin:55px auto;padding:0 20px}
-.feature{background:#141423;padding:25px;border:1px solid #292941;border-radius:14px;text-align:center}
-.feature h3{margin:12px 0}
-.feature p{color:#aaaabe;font-size:13px;line-height:1.6}
-footer{text-align:center;color:#77778b;padding:35px}
-@media(max-width:600px){.features{grid-template-columns:1fr}.workspace{margin:25px 15px;padding:20px}}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #090914;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
+
+header {
+  padding: 22px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #25253a;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.logo span {
+  color: #a17bff;
+}
+
+.header-label {
+  color: #b89cff;
+  font-size: 12px;
+}
+
+.hero {
+  text-align: center;
+  padding: 85px 20px 45px;
+}
+
+.tag {
+  display: inline-block;
+  background: #211735;
+  color: #c3aaff;
+  padding: 10px 17px;
+  border-radius: 30px;
+  margin-bottom: 25px;
+}
+
+h1 {
+  font-size: clamp(38px, 7vw, 65px);
+  line-height: 1.15;
+  margin-bottom: 20px;
+}
+
+h1 span {
+  color: #a17bff;
+}
+
+.subtitle {
+  color: #aaaabe;
+  max-width: 550px;
+  margin: auto;
+  line-height: 1.7;
+}
+
+.workspace {
+  max-width: 720px;
+  margin: 35px auto;
+  padding: 30px;
+  background: #141423;
+  border: 1px solid #292941;
+  border-radius: 18px;
+}
+
+label {
+  display: block;
+  margin-bottom: 14px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 18px;
+  border: 1px solid #35354e;
+  border-radius: 10px;
+  background: #090914;
+  color: white;
+  outline: none;
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+
+input:focus {
+  border-color: #956cff;
+}
+
+button {
+  width: 100%;
+  padding: 18px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  background: linear-gradient(90deg, #7046e8, #a05cff);
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+#status {
+  margin-top: 18px;
+  text-align: center;
+  line-height: 1.7;
+  color: #b89cff;
+  overflow-wrap: anywhere;
+}
+
+#jobResult {
+  display: none;
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 12px;
+  background: #202038;
+  border: 1px solid #393956;
+}
+
+#jobResult p {
+  color: #bcbcd0;
+  margin-top: 9px;
+  font-size: 13px;
+}
+
+#jobId {
+  color: #c6aaff;
+  overflow-wrap: anywhere;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  max-width: 900px;
+  margin: 55px auto;
+  padding: 0 20px;
+}
+
+.feature {
+  background: #141423;
+  border: 1px solid #292941;
+  border-radius: 14px;
+  padding: 25px;
+  text-align: center;
+}
+
+.feature h3 {
+  margin: 12px 0;
+}
+
+.feature p {
+  color: #aaaabe;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+footer {
+  text-align: center;
+  color: #77778b;
+  padding: 35px;
+}
+
+@media(max-width:600px) {
+  .features {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace {
+    margin: 25px 15px;
+    padding: 20px;
+  }
+}
 </style>
 </head>
 
@@ -37,57 +201,84 @@ footer{text-align:center;color:#77778b;padding:35px}
 
 <header>
   <div class="logo">Clip<span>Genius</span> AI</div>
-  <div>✦ AI CLIPPER</div>
+  <div class="header-label">✦ AI CLIPPER</div>
 </header>
 
 <section class="hero">
-  <div class="tag">✦ AI-Powered Video Clipping</div>
-  <h1>Turn Long Videos Into<br><span>Viral-Ready Clips.</span></h1>
+
+  <div class="tag">✦ AI-Powered Video Intelligence</div>
+
+  <h1>
+    Turn Long Videos Into<br>
+    <span>Viral-Ready Clips.</span>
+  </h1>
+
   <p class="subtitle">
-    Paste your video link and let artificial intelligence
-    discover the best moments and create short videos.
+    Paste your video link and let ClipGenius AI
+    discover the most interesting moments and
+    turn them into short videos.
   </p>
+
 </section>
 
 <section class="workspace">
+
   <label for="videoUrl">Paste your video link</label>
 
   <input
     type="url"
     id="videoUrl"
-    placeholder="https://www.youtube.com/watch?v=..."
+    placeholder="Paste your video URL here..."
   >
 
   <button id="startButton">
     ✂ Start Clipping
   </button>
 
-  <p id="status"></p>
+  <p id="status">Ready to receive your video link.</p>
+
+  <div id="jobResult">
+    <strong>✓ Clipping job created</strong>
+    <p>Job ID:</p>
+    <p id="jobId"></p>
+    <p id="jobPlatform"></p>
+    <p>Job status: <strong>Queued</strong></p>
+    <p>Your video is registered. The AI processing engine will be connected in the next stage.</p>
+  </div>
+
 </section>
 
 <section class="features">
+
   <div class="feature">
     <div>🧠</div>
     <h3>AI Detection</h3>
-    <p>Discover interesting moments.</p>
+    <p>Discover the most interesting moments.</p>
   </div>
 
   <div class="feature">
     <div>✂️</div>
-    <h3>Automatic Clipping</h3>
-    <p>Turn selected moments into clips.</p>
+    <h3>Smart Clipping</h3>
+    <p>Automatically select the best moments.</p>
   </div>
 
   <div class="feature">
     <div>⚡</div>
     <h3>Ready to Edit</h3>
-    <p>Preview and download finished clips.</p>
+    <p>Preview and download generated clips.</p>
   </div>
+
 </section>
 
-<footer>© 2026 ClipGenius AI. All rights reserved.</footer>
+<footer>
+  © 2026 ClipGenius AI. All rights reserved.
+  <p style="margin-top:10px;font-size:11px">
+    Version 2.0 - Supabase Connected
+  </p>
+</footer>
 
 <script type="module">
+
 import { createClient } from
 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
@@ -103,101 +294,132 @@ const supabase = createClient(
 );
 
 const button = document.getElementById('startButton');
-const statusText = document.getElementById('status');
-const videoInput = document.getElementById('videoUrl');
+const input = document.getElementById('videoUrl');
+const status = document.getElementById('status');
 
-function getPlatform(url) {
+function detectPlatform(url) {
+
   const host = new URL(url).hostname.toLowerCase();
 
-  if (host.includes('youtube.com') || host === 'youtu.be')
-    return 'youtube';
+  if (host === 'youtu.be' ||
+      host.endsWith('youtube.com')) return 'youtube';
 
-  if (host.includes('tiktok.com'))
-    return 'tiktok';
+  if (host.endsWith('tiktok.com')) return 'tiktok';
 
-  if (host.includes('instagram.com'))
-    return 'instagram';
+  if (host.endsWith('instagram.com')) return 'instagram';
 
-  if (host.includes('facebook.com') || host.includes('fb.watch'))
-    return 'facebook';
+  if (host === 'fb.watch' ||
+      host.endsWith('facebook.com')) return 'facebook';
 
-  if (host.includes('x.com') || host.includes('twitter.com'))
-    return 'x';
+  if (host === 'x.com' ||
+      host.endsWith('twitter.com')) return 'x';
 
   return 'other';
 }
 
 button.addEventListener('click', async () => {
-  const url = videoInput.value.trim();
+
+  const url = input.value.trim();
+
+  document.getElementById('jobResult').style.display = 'none';
 
   if (!url) {
-    statusText.textContent = 'Please paste a video link.';
+    status.textContent = 'Please paste a video link first.';
     return;
   }
 
-  let parsedUrl;
+  let platform;
 
   try {
-    parsedUrl = new URL(url);
 
-    if (!['https:', 'http:'].includes(parsedUrl.protocol)) {
-      throw new Error('Invalid URL');
+    const parsed = new URL(url);
+
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      throw new Error('Invalid link');
     }
+
+    platform = detectPlatform(url);
+
   } catch {
-    statusText.textContent = 'Please enter a valid video link.';
+    status.textContent = 'Please enter a valid video link.';
     return;
   }
 
   button.disabled = true;
-  button.textContent = 'Connecting...';
-  statusText.textContent = 'Connecting securely to ClipGenius AI...';
+  button.textContent = 'Connecting to AI...';
+  status.textContent = 'Connecting to ClipGenius database...';
 
   try {
+
     let { data: sessionData, error: sessionError } =
       await supabase.auth.getSession();
 
     if (sessionError) throw sessionError;
 
-    if (!sessionData.session) {
+    let user = sessionData.session?.user;
+
+    if (!user) {
+
+      status.textContent = 'Creating your secure session...';
+
       const { data, error } =
         await supabase.auth.signInAnonymously();
 
       if (error) throw error;
 
-      sessionData = { session: data.session };
+      user = data.user;
     }
 
-    const user = sessionData.session.user;
+    if (!user) {
+      throw new Error('Unable to create user session.');
+    }
 
-    button.textContent = 'Submitting job...';
+    button.textContent = 'Submitting video link...';
 
-    const { data: job, error: insertError } =
-      await supabase
-        .from('clip_jobs')
-        .insert({
-          source_url: url,
-          platform: getPlatform(url),
-          user_id: user.id,
-          status: 'queued'
-        })
-        .select('id, status')
-        .single();
+    status.textContent = 'Registering your clipping job...';
 
-    if (insertError) throw insertError;
+    const { data, error } = await supabase
+      .from('clip_jobs')
+      .insert({
+        source_url: url,
+        platform: platform,
+        user_id: user.id,
+        status: 'queued'
+      })
+      .select('id,status')
+      .single();
 
-    statusText.textContent =
-      'Your clipping job has been created! Job ID: ' + job.id +
-      '. AI video processing is the next stage.';
+    if (error) throw error;
+
+    document.getElementById('jobResult').style.display = 'block';
+
+    document.getElementById('jobId').textContent = data.id;
+
+    document.getElementById('jobPlatform').textContent =
+      'Video platform: ' + platform;
+
+    status.textContent =
+      'Your video link was successfully submitted!';
+
+    button.textContent = '✓ Job Created';
 
   } catch (error) {
-    console.error(error);
-    statusText.textContent =
-      'Connection error: ' + (error.message || 'Please try again.');
+
+    console.error('ClipGenius Error:', error);
+
+    status.textContent =
+      'Error: ' + (error.message || 'Something went wrong.');
+
+    button.textContent = 'Try Again';
+
   } finally {
+
     button.disabled = false;
-    button.textContent = '✂ Start Clipping';
+
   }
+
 });
+
 </script>
 
 </body>
