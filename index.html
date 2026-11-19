@@ -2,408 +2,389 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#090817">
-  <title>ClipGenius AI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090817">
+<title>ClipGenius AI</title>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
 
-    body {
-      min-height: 100vh;
-      background: #090817;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 22px;
-    }
+body {
+  min-height: 100vh;
+  background: #090817;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 22px;
+}
 
-    .container {
-      width: 100%;
-      max-width: 650px;
-      text-align: center;
-    }
+.container {
+  width: 100%;
+  max-width: 650px;
+  text-align: center;
+}
 
-    .logo {
-      font-size: 27px;
-      font-weight: 800;
-      margin-bottom: 55px;
-      letter-spacing: -1px;
-    }
+.logo {
+  font-size: 27px;
+  font-weight: 800;
+  margin-bottom: 55px;
+  letter-spacing: -1px;
+}
 
-    .logo span {
-      color: #9b75ff;
-    }
+.logo span, h1 span {
+  color: #a17aff;
+}
 
-    .tag {
-      display: inline-block;
-      color: #bba6ff;
-      background: #21183d;
-      border: 1px solid #49317d;
-      padding: 9px 16px;
-      border-radius: 30px;
-      font-size: 12px;
-      margin-bottom: 22px;
-    }
+.tag {
+  display: inline-block;
+  color: #bba6ff;
+  background: #21183d;
+  border: 1px solid #49317d;
+  padding: 9px 16px;
+  border-radius: 30px;
+  font-size: 12px;
+  margin-bottom: 22px;
+}
 
-    h1 {
-      font-size: clamp(35px, 7vw, 54px);
-      line-height: 1.12;
-      margin-bottom: 18px;
-      letter-spacing: -2px;
-    }
+h1 {
+  font-size: clamp(35px, 7vw, 54px);
+  line-height: 1.12;
+  margin-bottom: 18px;
+  letter-spacing: -2px;
+}
 
-    h1 span {
-      color: #a17aff;
-    }
+.description {
+  color: #aaa6bd;
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0 auto 35px;
+}
 
-    .description {
-      color: #aaa6bd;
-      font-size: 15px;
-      line-height: 1.7;
-      max-width: 480px;
-      margin: 0 auto 35px;
-    }
+.input-box {
+  background: #151326;
+  border: 1px solid #34304f;
+  border-radius: 17px;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
 
-    .input-box {
-      background: #151326;
-      border: 1px solid #34304f;
-      border-radius: 17px;
-      padding: 10px;
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
+input {
+  min-width: 0;
+  flex: 1;
+  padding: 15px 12px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: white;
+  font-size: 14px;
+}
 
-    input {
-      min-width: 0;
-      flex: 1;
-      padding: 15px 12px;
-      border: none;
-      outline: none;
-      background: transparent;
-      color: white;
-      font-size: 14px;
-    }
+input::placeholder {
+  color: #77738e;
+}
 
-    input::placeholder {
-      color: #77738e;
-    }
+button {
+  border: none;
+  background: linear-gradient(135deg, #8755ff, #5732d5);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 14px;
+}
 
-    button {
-      border: none;
-      background: linear-gradient(135deg, #8755ff, #5732d5);
-      color: white;
-      padding: 15px 20px;
-      border-radius: 12px;
-      font-weight: bold;
-      cursor: pointer;
-      white-space: nowrap;
-      font-size: 14px;
-    }
+button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
 
-    button:disabled {
-      opacity: .6;
-      cursor: wait;
-    }
+.message {
+  display: none;
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
 
-    .message {
-      display: none;
-      margin-top: 20px;
-      padding: 16px;
-      border-radius: 12px;
-      font-size: 14px;
-      line-height: 1.6;
-      overflow-wrap: anywhere;
-      text-align: left;
-    }
+.success {
+  display: block;
+  background: #10291f;
+  border: 1px solid #24754a;
+  color: #9df0bd;
+}
 
-    .success {
-      display: block;
-      background: #10291f;
-      border: 1px solid #24754a;
-      color: #9df0bd;
-    }
+.error {
+  display: block;
+  background: #301719;
+  border: 1px solid #8e3a42;
+  color: #ffb0b5;
+}
 
-    .error {
-      display: block;
-      background: #301719;
-      border: 1px solid #8e3a42;
-      color: #ffb0b5;
-    }
+.platforms {
+  color: #77738e;
+  font-size: 12px;
+  margin-top: 27px;
+  line-height: 2;
+}
 
-    .platforms {
-      color: #77738e;
-      font-size: 12px;
-      margin-top: 27px;
-      line-height: 2;
-    }
+.footer {
+  color: #605b76;
+  font-size: 11px;
+  margin-top: 60px;
+}
 
-    .footer {
-      color: #605b76;
-      font-size: 11px;
-      margin-top: 60px;
-    }
+@media(max-width: 520px) {
+  .input-box {
+    flex-direction: column;
+  }
 
-    @media(max-width: 520px) {
-      .input-box {
-        flex-direction: column;
-      }
+  button {
+    width: 100%;
+  }
 
-      button {
-        width: 100%;
-      }
-
-      .logo {
-        margin-bottom: 45px;
-      }
-    }
-  </style>
+  .logo {
+    margin-bottom: 45px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <main class="container">
+<main class="container">
 
-    <div class="logo">ClipGenius <span>AI</span></div>
+  <div class="logo">ClipGenius <span>AI</span></div>
 
-    <div class="tag">✦ AI VIDEO CLIPPING PLATFORM</div>
+  <div class="tag">✦ AI VIDEO CLIPPING PLATFORM</div>
 
-    <h1>
-      Turn Long Videos Into
-      <span>Viral-Ready Clips.</span>
-    </h1>
+  <h1>
+    Turn Long Videos Into
+    <span>Viral-Ready Clips.</span>
+  </h1>
 
-    <p class="description">
-      Paste your video link and let ClipGenius AI prepare your
-      clipping request. Find powerful moments and turn long
-      videos into short-form content.
-    </p>
+  <p class="description">
+    Paste your video link and let ClipGenius AI prepare
+    your clipping request.
+  </p>
 
-    <div class="input-box">
-      <input
-        type="url"
-        id="videoUrl"
-        placeholder="Paste your video link here..."
-        autocomplete="url"
-      >
+  <div class="input-box">
+    <input
+      type="url"
+      id="videoUrl"
+      placeholder="Paste your video link here..."
+      autocomplete="url"
+    >
 
-      <button id="clipButton">
-        ✂ Start Clipping
-      </button>
-    </div>
+    <button id="clipButton">✂ Start Clipping</button>
+  </div>
 
-    <div id="message" class="message"></div>
+  <div id="message" class="message"></div>
 
-    <div class="platforms">
-      Supported link types: YouTube · TikTok · Instagram ·
-      Facebook · X · Other video links
-    </div>
+  <div class="platforms">
+    YouTube · TikTok · Instagram · Facebook · X · Other video links
+  </div>
 
-    <div class="footer">
-      © 2026 ClipGenius AI. Built for creators.
-    </div>
+  <div class="footer">
+    © 2026 ClipGenius AI. Built for creators.
+  </div>
 
-  </main>
+</main>
 
-  <script type="module">
+<script type="module">
 
-    import { createClient } from
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { createClient } from
+"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-    // SUPABASE CONNECTION
+const SUPABASE_URL =
+"https://fvigtwkbkxkfdkpvbvjx.supabase.co";
 
-    const SUPABASE_URL =
-      "https://fvigtwkbkxkfdkpvbvjx.supabase.co";
+const SUPABASE_KEY =
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2aWd0d2tia3hrZmRrcHZidmp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMjI1MzEsImV4cCI6MjExMDY5ODUzMX0.p2CgJ6p8g0pCjTRqeBDyxQAEiJG3-zavKAPN1YCz5MI";
 
-    const SUPABASE_KEY =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2aWd0d2tia3hrZmRrcHZidmp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMjI1MzEsImV4cCI6MjExMDY5ODUzMX0.p2CgJ6p8g0pCjTRqeBDyxQAEiJG3-zavKAPN1YCz5MI";
+const supabase = createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
-    const supabase = createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
+const input = document.getElementById("videoUrl");
+const button = document.getElementById("clipButton");
+const message = document.getElementById("message");
+
+function showMessage(text, type) {
+  message.className = "message " + type;
+  message.textContent = text;
+}
+
+function detectPlatform(url) {
+  const host = new URL(url).hostname.toLowerCase();
+
+  if (host === "youtube.com" ||
+      host.endsWith(".youtube.com") ||
+      host === "youtu.be") return "youtube";
+
+  if (host === "tiktok.com" ||
+      host.endsWith(".tiktok.com")) return "tiktok";
+
+  if (host === "instagram.com" ||
+      host.endsWith(".instagram.com")) return "instagram";
+
+  if (host === "facebook.com" ||
+      host.endsWith(".facebook.com") ||
+      host === "fb.watch") return "facebook";
+
+  if (host === "x.com" ||
+      host.endsWith(".x.com") ||
+      host === "twitter.com" ||
+      host.endsWith(".twitter.com")) return "x";
+
+  return "other";
+}
+
+async function submitVideo() {
+  const url = input.value.trim();
+
+  if (!url) {
+    showMessage("Please paste a video link first.", "error");
+    return;
+  }
+
+  try {
+    const parsed = new URL(url);
+
+    if (!["https:", "http:"].includes(parsed.protocol)) {
+      throw new Error("Invalid URL protocol.");
+    }
+  } catch {
+    showMessage("Please enter a valid video URL.", "error");
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "Submitting...";
+  message.className = "message";
+
+  try {
+    // STEP 1: GET USER SESSION
+
+    let { data: sessionData, error: sessionError } =
+      await supabase.auth.getSession();
+
+    if (sessionError) throw sessionError;
+
+    let user = sessionData.session?.user;
+
+    if (!user) {
+      const { data, error } =
+        await supabase.auth.signInAnonymously();
+
+      if (error) throw error;
+
+      user = data.user;
+    }
+
+    if (!user) {
+      throw new Error("Could not create user session.");
+    }
+
+    // STEP 2: SAVE VIDEO JOB
+
+    const platform = detectPlatform(url);
+
+    const { data: job, error: insertError } =
+      await supabase
+        .from("clip_jobs")
+        .insert({
+          source_url: url,
+          platform: platform,
+          user_id: user.id,
+          status: "queued"
+        })
+        .select("id, status")
+        .single();
+
+    if (insertError) throw insertError;
+
+    // STEP 3: CALL EDGE FUNCTION
+
+    button.textContent = "Connecting to backend...";
+
+    const { data: result, error: functionError } =
+      await supabase.functions.invoke("process-clip", {
+        body: {
+          job_id: job.id
+        }
+      });
+
+    if (functionError) {
+      console.error("Backend error:", functionError);
+
+      showMessage(
+        "Your video request was saved successfully, but the processing backend could not retrieve it. Job ID: " +
+        job.id +
+        ". Error: " + functionError.message,
+        "error"
+      );
+
+      return;
+    }
+
+    if (!result || !result.success) {
+      throw new Error(
+        result?.error || "Backend returned an unexpected response."
+      );
+    }
+
+    // STEP 4: SHOW SUCCESS
+
+    showMessage(
+      "Your video request was saved and the backend successfully retrieved it! " +
+      "Platform: " + platform +
+      ". Job ID: " + job.id +
+      ". Current stage: " + result.processing.stage +
+      ". AI clipping is not connected yet.",
+      "success"
     );
 
-    const input = document.getElementById("videoUrl");
-    const button = document.getElementById("clipButton");
-    const message = document.getElementById("message");
+    input.value = "";
 
-    function showMessage(text, type) {
-      message.className = "message " + type;
-      message.textContent = text;
-    }
+  } catch (error) {
+    console.error("ClipGenius error:", error);
 
-    function detectPlatform(url) {
-      const host = new URL(url).hostname.toLowerCase();
+    showMessage(
+      error.message || "Something went wrong.",
+      "error"
+    );
 
-      if (
-        host === "youtube.com" ||
-        host.endsWith(".youtube.com") ||
-        host === "youtu.be"
-      ) return "youtube";
+  } finally {
+    button.disabled = false;
+    button.textContent = "✂ Start Clipping";
+  }
+}
 
-      if (
-        host === "tiktok.com" ||
-        host.endsWith(".tiktok.com")
-      ) return "tiktok";
+button.addEventListener("click", submitVideo);
 
-      if (
-        host === "instagram.com" ||
-        host.endsWith(".instagram.com")
-      ) return "instagram";
+input.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    submitVideo();
+  }
+});
 
-      if (
-        host === "facebook.com" ||
-        host.endsWith(".facebook.com") ||
-        host === "fb.watch"
-      ) return "facebook";
-
-      if (
-        host === "x.com" ||
-        host.endsWith(".x.com") ||
-        host === "twitter.com" ||
-        host.endsWith(".twitter.com")
-      ) return "x";
-
-      return "other";
-    }
-
-    async function submitVideo() {
-
-      const url = input.value.trim();
-
-      if (!url) {
-        showMessage(
-          "Please paste a video link first.",
-          "error"
-        );
-        return;
-      }
-
-      let parsedUrl;
-
-      try {
-        parsedUrl = new URL(url);
-
-        if (
-          parsedUrl.protocol !== "https:" &&
-          parsedUrl.protocol !== "http:"
-        ) {
-          throw new Error("Invalid protocol");
-        }
-
-      } catch {
-        showMessage(
-          "Please enter a valid video URL.",
-          "error"
-        );
-        return;
-      }
-
-      button.disabled = true;
-      button.textContent = "Please wait...";
-      message.className = "message";
-      message.textContent = "";
-
-      try {
-
-        // CHECK EXISTING SESSION
-
-        let { data: sessionData, error: sessionError } =
-          await supabase.auth.getSession();
-
-        if (sessionError) {
-          throw sessionError;
-        }
-
-        let user = sessionData.session?.user;
-
-        // CREATE ANONYMOUS SESSION IF NEEDED
-
-        if (!user) {
-
-          const { data, error } =
-            await supabase.auth.signInAnonymously();
-
-          if (error) {
-            throw error;
-          }
-
-          user = data.user;
-        }
-
-        if (!user) {
-          throw new Error(
-            "Could not establish your account session."
-          );
-        }
-
-        // DETECT VIDEO PLATFORM
-
-        const platform = detectPlatform(url);
-
-        // SAVE CLIPPING REQUEST
-
-        const { data: job, error: insertError } =
-          await supabase
-            .from("clip_jobs")
-            .insert({
-              source_url: url,
-              platform: platform,
-              user_id: user.id,
-              status: "queued"
-            })
-            .select("id, status")
-            .single();
-
-        if (insertError) {
-          throw insertError;
-        }
-
-        showMessage(
-          "Your video link was successfully submitted! " +
-          "Platform: " + platform +
-          ". Job ID: " + job.id +
-          ". Your request is saved in the database.",
-          "success"
-        );
-
-        input.value = "";
-
-      } catch (error) {
-
-        console.error("ClipGenius error:", error);
-
-        showMessage(
-          error.message ||
-          "Something went wrong. Please try again.",
-          "error"
-        );
-
-      } finally {
-
-        button.disabled = false;
-        button.textContent = "✂ Start Clipping";
-
-      }
-    }
-
-    button.addEventListener("click", submitVideo);
-
-    input.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        submitVideo();
-      }
-    });
-
-  </script>
+</script>
 
 </body>
 </html>
