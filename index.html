@@ -2,336 +2,229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ClipGenius AI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClipGenius AI</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      min-height: 100vh;
-      background: #080b18;
-      color: white;
-      font-family: Arial, sans-serif;
-      padding: 25px 16px;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 850px;
-      margin: 35px auto;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 35px;
-    }
-
-    .logo {
-      font-size: 34px;
-      font-weight: 800;
-      color: #a78bfa;
-      margin-bottom: 10px;
-    }
-
-    header p {
-      color: #a5abc0;
-      font-size: 14px;
-    }
-
-    .panel {
-      background: #11172b;
-      border: 1px solid #252e4b;
-      border-radius: 18px;
-      padding: 25px;
-      box-shadow: 0 15px 45px #0005;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 12px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    input {
-      width: 100%;
-      padding: 16px;
-      border: 1px solid #303b60;
-      border-radius: 10px;
-      outline: none;
-      background: #080d1e;
-      color: white;
-      font-size: 15px;
-    }
-
-    input:focus {
-      border-color: #8b5cf6;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 15px;
-      padding: 16px;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(90deg, #7c3aed, #4f46e5);
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:disabled {
-      opacity: 0.6;
-      cursor: wait;
-    }
-
-    .preview {
-      display: none;
-      margin-top: 25px;
-      overflow: hidden;
-      border-radius: 14px;
-      background: #000;
-      border: 1px solid #303b60;
-    }
-
-    .preview iframe {
-      display: block;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      border: 0;
-    }
-
-    .preview-title {
-      padding: 13px;
-      color: #c4b5fd;
-      font-size: 14px;
-    }
-
-    .message {
-      display: none;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 25px;
-      color: #69718c;
-      font-size: 12px;
-    }
-
-    @media (max-width: 500px) {
-      .container {
-        margin-top: 15px;
-      }
-
-      .panel {
-        padding: 18px;
-      }
-
-      .logo {
-        font-size: 29px;
-      }
-    }
-  </style>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#080b18;color:#fff;font-family:Arial,sans-serif;padding:22px 15px}
+.container{max-width:850px;margin:25px auto}
+header{text-align:center;margin-bottom:30px}
+.logo{font-size:32px;font-weight:800;color:#a78bfa;margin-bottom:9px}
+header p{color:#9ca3b8;font-size:14px}
+.panel{background:#11172b;border:1px solid #293453;border-radius:17px;padding:22px;margin-bottom:20px}
+h2{font-size:19px;margin-bottom:17px}
+label{display:block;font-size:14px;font-weight:bold;margin-bottom:10px}
+input{width:100%;padding:15px;background:#080d1e;border:1px solid #303b60;border-radius:9px;color:white;outline:none;font-size:15px}
+input:focus{border-color:#8b5cf6}
+button{border:0;border-radius:9px;padding:14px;background:linear-gradient(90deg,#7c3aed,#4f46e5);color:white;font-weight:bold;font-size:15px;cursor:pointer}
+button:disabled{opacity:.6}
+.main-btn{width:100%;margin-top:13px}
+.preview{display:none;margin-top:20px;background:#000;border-radius:12px;overflow:hidden}
+.preview iframe{width:100%;aspect-ratio:16/9;border:0;display:block}
+.preview-title{padding:12px;color:#c4b5fd;font-size:14px}
+.analysis{display:none}
+.status{color:#a5abc0;font-size:13px;margin:12px 0}
+.result{background:#0b1226;border:1px solid #293453;border-radius:12px;padding:16px;margin-top:12px}
+.result h3{font-size:15px;margin-bottom:9px}
+.details{font-size:13px;color:#a5abc0;margin-bottom:13px}
+.result button{padding:10px 15px;font-size:13px}
+.tag{display:inline-block;background:#30245b;color:#c4b5fd;padding:5px 9px;border-radius:20px;font-size:11px;margin-bottom:10px}
+.note{font-size:12px;color:#9ca3b8;line-height:1.6;margin-top:15px}
+.footer{text-align:center;color:#65708d;font-size:12px;margin-top:25px}
+</style>
 </head>
 
 <body>
-  <main class="container">
+<main class="container">
 
-    <header>
-      <div class="logo">✂ ClipGenius AI</div>
-      <p>Turn your videos into engaging clips.</p>
-    </header>
+<header>
+<div class="logo">✂ ClipGenius AI</div>
+<p>Discover the best moments in your videos.</p>
+</header>
 
-    <section class="panel">
+<section class="panel">
+<h2>Start a new project</h2>
 
-      <label for="videoUrl">Paste your video link</label>
+<label for="videoUrl">Video URL</label>
+<input id="videoUrl" type="url" placeholder="Paste a YouTube link">
 
-      <input
-        id="videoUrl"
-        type="url"
-        placeholder="Paste a YouTube video link here..."
-        autocomplete="url"
-      >
+<button class="main-btn" id="startButton">✂ Start Clipping</button>
 
-      <button id="clipButton">✂ Start Clipping</button>
+<div class="preview" id="preview">
+<div class="preview-title">Your Video</div>
+<iframe id="videoFrame" title="Video preview"
+allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share"
+allowfullscreen
+referrerpolicy="strict-origin-when-cross-origin"></iframe>
+</div>
+</section>
 
-      <div class="preview" id="preview">
-        <div class="preview-title">Your Video</div>
-        <iframe
-          id="videoFrame"
-          title="Video preview"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-          referrerpolicy="strict-origin-when-cross-origin">
-        </iframe>
-      </div>
+<section class="panel analysis" id="analysis">
+<h2>Video Analysis</h2>
+<div class="tag">DEMO RESULTS</div>
+<p class="status" id="analysisStatus">Example suggestions — not yet analysed by AI.</p>
+<div id="results"></div>
+<p class="note">
+These are sample timestamps to demonstrate the interface. Actual AI analysis and automatic clip creation will be connected later.
+</p>
+</section>
 
-      <div class="message" id="message"></div>
+<div class="footer">ClipGenius AI · Video intelligence workspace</div>
+</main>
 
-    </section>
+<script>
+const SUPABASE_URL="https://fvigtwkbkxkfdkpvbvjx.supabase.co";
 
-    <div class="footer">
-      ClipGenius AI · Smart Video Clipping
-    </div>
-  </main>
+const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2aWd0d2tia3hrZmRrcHZidmp4Iiwicm9sZSI6MTc5NTEyMjUzLCJleHAiOjIxMTA2OTg1MzN9.p2CgJ6p8g0pCjTRqeBDyxQAEiJG3-zavKAPN1YCz5MI";
 
-  <script>
-    const SUPABASE_URL =
-      "https://fvigtwkbkxkfdkpvbvjx.supabase.co";
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
-    const SUPABASE_ANON_KEY =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2aWd0d2tia3hrZmRrcHZidmp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMjI1MzEsImV4cCI6MjExMDY5ODUzMX0.p2CgJ6p8g0pCjTRqeBDyxQAEiJG3-zavKAPN1YCz5MI";
+const videoUrl=document.getElementById("videoUrl");
+const preview=document.getElementById("preview");
+const videoFrame=document.getElementById("videoFrame");
+const startButton=document.getElementById("startButton");
+const analysis=document.getElementById("analysis");
+const results=document.getElementById("results");
 
-    const supabase = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
+function getYouTubeId(value){
+try{
+const url=new URL(value);
+const host=url.hostname.replace(/^www\./,"");
 
-    const videoInput = document.getElementById("videoUrl");
-    const clipButton = document.getElementById("clipButton");
-    const preview = document.getElementById("preview");
-    const videoFrame = document.getElementById("videoFrame");
+if(host==="youtu.be")return url.pathname.split("/")[1]||null;
 
-    function getYouTubeId(url) {
-      try {
-        const parsed = new URL(url);
-        const host = parsed.hostname.replace(/^www\./, "");
+if(["youtube.com","m.youtube.com","youtube-nocookie.com"].includes(host)){
+if(url.pathname==="/watch")return url.searchParams.get("v");
+const match=url.pathname.match(/^\/(embed|shorts|live)\/([^/?]+)/);
+return match?match[2]:null;
+}
+return null;
+}catch{return null;}
+}
 
-        if (host === "youtu.be") {
-          return parsed.pathname.split("/")[1] || null;
-        }
+function showVideo(id){
+videoFrame.src="https://www.youtube-nocookie.com/embed/"+encodeURIComponent(id);
+preview.style.display="block";
+}
 
-        if (
-          host === "youtube.com" ||
-          host === "m.youtube.com" ||
-          host === "youtube-nocookie.com"
-        ) {
-          if (parsed.pathname === "/watch") {
-            return parsed.searchParams.get("v");
-          }
+function hideVideo(){
+videoFrame.src="";
+preview.style.display="none";
+}
 
-          const match = parsed.pathname.match(
-            /^\/(embed|shorts|live)\/([^/?]+)/
-          );
+async function getSession(){
+const {data:{session},error}=await supabase.auth.getSession();
+if(error)throw error;
+if(session)return session;
 
-          return match ? match[2] : null;
-        }
+const {data,error:signError}=await supabase.auth.signInAnonymously();
+if(signError)throw signError;
+return data.session;
+}
 
-        return null;
-      } catch {
-        return null;
-      }
-    }
+async function saveJob(url){
+const session=await getSession();
 
-    function showVideo(id) {
-      videoFrame.src =
-        "https://www.youtube-nocookie.com/embed/" +
-        encodeURIComponent(id);
+const {data:job,error}=await supabase
+.from("clip_jobs")
+.insert({
+source_url:url,
+platform:"youtube",
+status:"queued",
+user_id:session.user.id
+})
+.select("id")
+.single();
 
-      preview.style.display = "block";
-    }
+if(error)throw error;
 
-    function hideVideo() {
-      videoFrame.src = "";
-      preview.style.display = "none";
-    }
+const {error:functionError}=await supabase.functions.invoke(
+"process-clip",
+{body:{job_id:job.id}}
+);
 
-    async function getUserSession() {
-      const {
-        data: { session },
-        error
-      } = await supabase.auth.getSession();
+if(functionError)console.error("Backend error:",functionError);
+}
 
-      if (error) throw error;
+function showDemoResults(){
+const suggestions=[
+{title:"Interesting Moment 1",start:"00:00:15",end:"00:00:45",duration:"30 seconds"},
+{title:"Interesting Moment 2",start:"00:01:20",end:"00:01:55",duration:"35 seconds"},
+{title:"Interesting Moment 3",start:"00:02:10",end:"00:02:50",duration:"40 seconds"}
+];
 
-      if (session) return session;
+results.innerHTML="";
 
-      const {
-        data,
-        error: signInError
-      } = await supabase.auth.signInAnonymously();
+suggestions.forEach(item=>{
+const card=document.createElement("div");
+card.className="result";
 
-      if (signInError) throw signInError;
+const title=document.createElement("h3");
+title.textContent=item.title;
 
-      return data.session;
-    }
+const details=document.createElement("p");
+details.className="details";
+details.textContent=item.start+" – "+item.end+" · "+item.duration;
 
-    async function submitJob(url, platform) {
-      const session = await getUserSession();
+const button=document.createElement("button");
+button.textContent="Preview this moment";
+button.addEventListener("click",()=>{
+const id=getYouTubeId(videoUrl.value.trim());
+if(!id)return;
 
-      if (!session || !session.user) {
-        throw new Error("Could not create a user session.");
-      }
+const seconds=toSeconds(item.start);
+videoFrame.src="https://www.youtube-nocookie.com/embed/"+
+encodeURIComponent(id)+"?start="+seconds+"&autoplay=1";
+preview.scrollIntoView({behavior:"smooth",block:"center"});
+});
 
-      const {
-        data: job,
-        error: insertError
-      } = await supabase
-        .from("clip_jobs")
-        .insert({
-          source_url: url,
-          platform: platform,
-          status: "queued",
-          user_id: session.user.id
-        })
-        .select("id")
-        .single();
+card.append(title,details,button);
+results.appendChild(card);
+});
+}
 
-      if (insertError) throw insertError;
+function toSeconds(time){
+const parts=time.split(":").map(Number);
+return parts[0]*3600+parts[1]*60+parts[2];
+}
 
-      // Run the backend silently.
-      const { error: functionError } =
-        await supabase.functions.invoke("process-clip", {
-          body: {
-            job_id: job.id
-          }
-        });
+startButton.addEventListener("click",async()=>{
+const url=videoUrl.value.trim();
+const id=getYouTubeId(url);
 
-      if (functionError) {
-        console.error("Background processing error:", functionError);
-      }
-    }
+if(!url||!id){
+hideVideo();
+analysis.style.display="none";
+alert("Please enter a valid YouTube video link.");
+return;
+}
 
-    clipButton.addEventListener("click", async () => {
-      const url = videoInput.value.trim();
+startButton.disabled=true;
+startButton.textContent="Preparing video...";
 
-      if (!url) {
-        hideVideo();
-        return;
-      }
+showVideo(id);
 
-      const videoId = getYouTubeId(url);
+analysis.style.display="block";
+document.getElementById("analysisStatus").textContent=
+"Loading example suggestions...";
 
-      if (!videoId) {
-        hideVideo();
-        return;
-      }
+showDemoResults();
 
-      // Show the video immediately.
-      showVideo(videoId);
+document.getElementById("analysisStatus").textContent=
+"Example suggestions — actual AI analysis is not connected yet.";
 
-      // Keep technical messages off the screen.
-      clipButton.disabled = true;
-      clipButton.textContent = "Opening video...";
-
-      // Save and process in the background.
-      submitJob(url, "youtube").catch(error => {
-        console.error("Clip job error:", error);
-      }).finally(() => {
-        clipButton.disabled = false;
-        clipButton.textContent = "✂ Start Clipping";
-      });
-    });
-
-  </script>
+try{
+await saveJob(url);
+}catch(error){
+console.error("Job submission failed:",error);
+}finally{
+startButton.disabled=false;
+startButton.textContent="✂ Start Clipping";
+}
+});
+</script>
 </body>
 </html>
