@@ -19,23 +19,19 @@ body {
   min-height: 100vh;
   background: #090817;
   color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 22px;
+  padding: 25px 18px;
 }
 
 .container {
-  width: 100%;
-  max-width: 650px;
+  max-width: 720px;
+  margin: auto;
   text-align: center;
 }
 
 .logo {
   font-size: 27px;
   font-weight: 800;
-  margin-bottom: 55px;
-  letter-spacing: -1px;
+  margin: 25px 0 55px;
 }
 
 .logo span, h1 span {
@@ -62,10 +58,9 @@ h1 {
 
 .description {
   color: #aaa6bd;
-  font-size: 15px;
   line-height: 1.7;
-  max-width: 480px;
-  margin: 0 auto 35px;
+  max-width: 490px;
+  margin: 0 auto 32px;
 }
 
 .input-box {
@@ -75,7 +70,6 @@ h1 {
   padding: 10px;
   display: flex;
   gap: 10px;
-  margin-bottom: 15px;
 }
 
 input {
@@ -101,13 +95,50 @@ button {
   border-radius: 12px;
   font-weight: bold;
   cursor: pointer;
-  white-space: nowrap;
-  font-size: 14px;
 }
 
 button:disabled {
   opacity: .6;
-  cursor: wait;
+}
+
+.preview {
+  display: none;
+  margin-top: 25px;
+  background: #151326;
+  border: 1px solid #34304f;
+  border-radius: 17px;
+  padding: 12px;
+  text-align: left;
+}
+
+.preview.show {
+  display: block;
+}
+
+.preview h3 {
+  font-size: 15px;
+  margin: 5px 5px 12px;
+}
+
+.player {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #05040b;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.player iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.preview-note {
+  color: #aaa6bd;
+  font-size: 12px;
+  margin: 12px 5px 5px;
+  line-height: 1.6;
 }
 
 .message {
@@ -116,7 +147,7 @@ button:disabled {
   padding: 16px;
   border-radius: 12px;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.7;
   overflow-wrap: anywhere;
   text-align: left;
 }
@@ -145,7 +176,7 @@ button:disabled {
 .footer {
   color: #605b76;
   font-size: 11px;
-  margin-top: 60px;
+  margin-top: 55px;
 }
 
 @media(max-width: 520px) {
@@ -155,10 +186,6 @@ button:disabled {
 
   button {
     width: 100%;
-  }
-
-  .logo {
-    margin-bottom: 45px;
   }
 }
 </style>
@@ -178,25 +205,37 @@ button:disabled {
   </h1>
 
   <p class="description">
-    Paste your video link and let ClipGenius AI prepare
-    your clipping request.
+    Paste a video link to preview your video and
+    submit it for AI clipping.
   </p>
 
   <div class="input-box">
     <input
       type="url"
       id="videoUrl"
-      placeholder="Paste your video link here..."
+      placeholder="Paste your YouTube video link..."
       autocomplete="url"
     >
 
-    <button id="clipButton">✂ Start Clipping</button>
+    <button id="clipButton">
+      ✂ Start Clipping
+    </button>
   </div>
+
+  <section class="preview" id="preview">
+    <h3 id="videoTitle">Video Preview</h3>
+
+    <div class="player" id="player"></div>
+
+    <p class="preview-note" id="previewNote">
+      YouTube video preview.
+    </p>
+  </section>
 
   <div id="message" class="message"></div>
 
   <div class="platforms">
-    YouTube · TikTok · Instagram · Facebook · X · Other video links
+    YouTube · TikTok · Instagram · Facebook · X
   </div>
 
   <div class="footer">
@@ -224,33 +263,126 @@ const supabase = createClient(
 const input = document.getElementById("videoUrl");
 const button = document.getElementById("clipButton");
 const message = document.getElementById("message");
+const preview = document.getElementById("preview");
+const player = document.getElementById("player");
+const previewNote = document.getElementById("previewNote");
+const videoTitle = document.getElementById("videoTitle");
 
 function showMessage(text, type) {
   message.className = "message " + type;
   message.textContent = text;
 }
 
+function getYouTubeId(url) {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase();
+
+    if (
+      host === "youtu.be" ||
+      host === "www.youtu.be"
+    ) {
+      return parsed.pathname.split("/")[1] || null;
+    }
+
+    if (
+      host === "youtube.com" ||
+      host === "www.youtube.com" ||
+      host === "m.youtube.com" ||
+      host === "youtube-nocookie.com" ||
+      host === "www.youtube-nocookie.com"
+    ) {
+      if (parsed.pathname === "/watch") {
+        return parsed.searchParams.get("v");
+      }
+
+      const match = parsed.pathname.match(
+        /^\/(embed|shorts|live)\/([^/?]+)/
+      );
+
+      return match ? match[2] : null;
+    }
+
+    return null;
+
+  } catch {
+    return null;
+  }
+}
+
+function showPreview(url) {
+  const id = getYouTubeId(url);
+
+  if (!id || !/^[a-zA-Z0-9_-]{11}$/.test(id)) {
+    preview.classList.remove("show");
+    player.replaceChildren();
+    return;
+  }
+
+  const iframe = document.createElement("iframe");
+
+  iframe.src =
+    "https://www.youtube-nocookie.com/embed/" +
+    encodeURIComponent(id);
+
+  iframe.title = "YouTube video preview";
+  iframe.allow =
+    "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+  iframe.allowFullscreen = true;
+  iframe.referrerPolicy = "strict-origin-when-cross-origin";
+
+  player.replaceChildren(iframe);
+
+  videoTitle.textContent = "Your YouTube Video";
+  previewNote.textContent =
+    "Play your video here. Some videos may block embedding.";
+
+  preview.classList.add("show");
+}
+
+input.addEventListener("input", () => {
+  const url = input.value.trim();
+
+  if (!url) {
+    preview.classList.remove("show");
+    player.replaceChildren();
+    return;
+  }
+
+  showPreview(url);
+});
+
 function detectPlatform(url) {
   const host = new URL(url).hostname.toLowerCase();
 
-  if (host === "youtube.com" ||
-      host.endsWith(".youtube.com") ||
-      host === "youtu.be") return "youtube";
+  if (
+    host === "youtube.com" ||
+    host.endsWith(".youtube.com") ||
+    host === "youtu.be"
+  ) return "youtube";
 
-  if (host === "tiktok.com" ||
-      host.endsWith(".tiktok.com")) return "tiktok";
+  if (
+    host === "tiktok.com" ||
+    host.endsWith(".tiktok.com")
+  ) return "tiktok";
 
-  if (host === "instagram.com" ||
-      host.endsWith(".instagram.com")) return "instagram";
+  if (
+    host === "instagram.com" ||
+    host.endsWith(".instagram.com")
+  ) return "instagram";
 
-  if (host === "facebook.com" ||
-      host.endsWith(".facebook.com") ||
-      host === "fb.watch") return "facebook";
+  if (
+    host === "facebook.com" ||
+    host.endsWith(".facebook.com") ||
+    host === "fb.watch"
+  ) return "facebook";
 
-  if (host === "x.com" ||
-      host.endsWith(".x.com") ||
-      host === "twitter.com" ||
-      host.endsWith(".twitter.com")) return "x";
+  if (
+    host === "x.com" ||
+    host.endsWith(".x.com") ||
+    host === "twitter.com" ||
+    host.endsWith(".twitter.com")
+  ) return "x";
 
   return "other";
 }
@@ -263,11 +395,15 @@ async function submitVideo() {
     return;
   }
 
-  try {
-    const parsed = new URL(url);
+  let parsed;
 
-    if (!["https:", "http:"].includes(parsed.protocol)) {
-      throw new Error("Invalid URL protocol.");
+  try {
+    parsed = new URL(url);
+
+    if (
+      !["https:", "http:"].includes(parsed.protocol)
+    ) {
+      throw new Error("Invalid URL");
     }
   } catch {
     showMessage("Please enter a valid video URL.", "error");
@@ -279,7 +415,7 @@ async function submitVideo() {
   message.className = "message";
 
   try {
-    // STEP 1: GET USER SESSION
+    // GET USER SESSION
 
     let { data: sessionData, error: sessionError } =
       await supabase.auth.getSession();
@@ -301,9 +437,11 @@ async function submitVideo() {
       throw new Error("Could not create user session.");
     }
 
-    // STEP 2: SAVE VIDEO JOB
+    // DETECT PLATFORM
 
     const platform = detectPlatform(url);
+
+    // SAVE JOB
 
     const { data: job, error: insertError } =
       await supabase
@@ -319,9 +457,9 @@ async function submitVideo() {
 
     if (insertError) throw insertError;
 
-    // STEP 3: CALL EDGE FUNCTION
+    // CALL BACKEND
 
-    button.textContent = "Connecting to backend...";
+    button.textContent = "Connecting...";
 
     const { data: result, error: functionError } =
       await supabase.functions.invoke("process-clip", {
@@ -331,10 +469,10 @@ async function submitVideo() {
       });
 
     if (functionError) {
-      console.error("Backend error:", functionError);
+      console.error(functionError);
 
       showMessage(
-        "Your video request was saved successfully, but the processing backend could not retrieve it. Job ID: " +
+        "Your video was saved, but the backend could not retrieve it. Job ID: " +
         job.id +
         ". Error: " + functionError.message,
         "error"
@@ -345,25 +483,20 @@ async function submitVideo() {
 
     if (!result || !result.success) {
       throw new Error(
-        result?.error || "Backend returned an unexpected response."
+        result?.error || "Unexpected backend response."
       );
     }
 
-    // STEP 4: SHOW SUCCESS
-
     showMessage(
-      "Your video request was saved and the backend successfully retrieved it! " +
-      "Platform: " + platform +
+      "Video submitted successfully! Your backend retrieved the job. Platform: " +
+      platform +
       ". Job ID: " + job.id +
-      ". Current stage: " + result.processing.stage +
       ". AI clipping is not connected yet.",
       "success"
     );
 
-    input.value = "";
-
   } catch (error) {
-    console.error("ClipGenius error:", error);
+    console.error("ClipGenius:", error);
 
     showMessage(
       error.message || "Something went wrong.",
