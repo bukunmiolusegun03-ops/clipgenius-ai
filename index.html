@@ -2,188 +2,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#090914">
-  <title>ClipGenius AI - AI Video Clipper</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090914">
+<title>ClipGenius AI</title>
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #090914;
-      color: white;
-      min-height: 100vh;
-    }
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-    header {
-      padding: 22px 7%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #24243a;
-    }
+body {
+  background: #090914;
+  color: white;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
 
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-    }
+header {
+  padding: 22px 7%;
+  border-bottom: 1px solid #25253a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    .logo span {
-      color: #9b72ff;
-    }
+.logo {
+  font-size: 23px;
+  font-weight: bold;
+}
 
-    .hero {
-      text-align: center;
-      padding: 85px 20px 45px;
-    }
+.logo span, h1 span {
+  color: #a17bff;
+}
 
-    .tag {
-      color: #b89cff;
-      background: #211735;
-      padding: 10px 17px;
-      border-radius: 30px;
-      display: inline-block;
-      margin-bottom: 25px;
-    }
+.hero {
+  text-align: center;
+  padding: 85px 20px 45px;
+}
 
-    h1 {
-      font-size: clamp(38px, 7vw, 65px);
-      margin-bottom: 20px;
-    }
+.tag {
+  display: inline-block;
+  padding: 10px 17px;
+  border-radius: 30px;
+  background: #211735;
+  color: #c3aaff;
+  margin-bottom: 25px;
+}
 
-    h1 span {
-      color: #a17bff;
-    }
+h1 {
+  font-size: clamp(38px, 7vw, 65px);
+  margin-bottom: 20px;
+}
 
-    .subtitle {
-      color: #aaaabe;
-      line-height: 1.7;
-      max-width: 550px;
-      margin: auto;
-    }
+.subtitle {
+  color: #aaaabe;
+  max-width: 540px;
+  margin: auto;
+  line-height: 1.7;
+}
 
-    .workspace {
-      max-width: 720px;
-      margin: 35px auto;
-      padding: 30px;
-      background: #141423;
-      border: 1px solid #292941;
-      border-radius: 18px;
-    }
+.workspace {
+  max-width: 720px;
+  margin: 35px auto;
+  padding: 30px;
+  background: #141423;
+  border: 1px solid #292941;
+  border-radius: 18px;
+}
 
-    label {
-      display: block;
-      margin-bottom: 12px;
-      font-weight: bold;
-    }
+label {
+  display: block;
+  margin-bottom: 13px;
+  font-weight: bold;
+}
 
-    input {
-      width: 100%;
-      padding: 17px;
-      background: #090914;
-      border: 1px solid #35354e;
-      border-radius: 10px;
-      color: white;
-      outline: none;
-      margin-bottom: 15px;
-    }
+input {
+  width: 100%;
+  padding: 17px;
+  border: 1px solid #35354e;
+  border-radius: 10px;
+  background: #090914;
+  color: white;
+  outline: none;
+  font-size: 15px;
+  margin-bottom: 18px;
+}
 
-    input:focus {
-      border-color: #956cff;
-    }
+input:focus {
+  border-color: #956cff;
+}
 
-    button {
-      cursor: pointer;
-      border: none;
-      border-radius: 10px;
-      padding: 16px;
-      font-weight: bold;
-    }
+button {
+  width: 100%;
+  padding: 17px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  background: linear-gradient(90deg, #7046e8, #a05cff);
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    .primary {
-      width: 100%;
-      color: white;
-      background: linear-gradient(90deg, #7046e8, #a05cff);
-      font-size: 16px;
-    }
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
 
-    .upload {
-      width: 100%;
-      color: white;
-      background: #24243b;
-      margin-top: 12px;
-    }
+#status {
+  color: #b89cff;
+  margin-top: 18px;
+  text-align: center;
+  line-height: 1.6;
+}
 
-    .features {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      max-width: 900px;
-      margin: 50px auto;
-      padding: 0 20px;
-    }
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  max-width: 900px;
+  margin: 55px auto;
+  padding: 0 20px;
+}
 
-    .feature {
-      background: #141423;
-      padding: 25px;
-      border: 1px solid #292941;
-      border-radius: 14px;
-      text-align: center;
-    }
+.feature {
+  background: #141423;
+  padding: 25px;
+  border: 1px solid #292941;
+  border-radius: 14px;
+  text-align: center;
+}
 
-    .feature h3 {
-      margin: 12px 0;
-    }
+.feature h3 {
+  margin: 12px 0;
+}
 
-    .feature p {
-      color: #aaaabe;
-      font-size: 13px;
-      line-height: 1.6;
-    }
+.feature p {
+  color: #aaaabe;
+  font-size: 13px;
+  line-height: 1.6;
+}
 
-    footer {
-      text-align: center;
-      color: #77778b;
-      padding: 35px;
-    }
+footer {
+  text-align: center;
+  color: #77778b;
+  padding: 35px;
+}
 
-    #status {
-      color: #b89cff;
-      margin-top: 15px;
-      font-size: 14px;
-    }
+@media(max-width: 600px) {
+  .features {
+    grid-template-columns: 1fr;
+  }
 
-    @media(max-width: 600px) {
-      .features {
-        grid-template-columns: 1fr;
-      }
-
-      .workspace {
-        margin: 25px 15px;
-        padding: 20px;
-      }
-
-      .hero {
-        padding-top: 60px;
-      }
-    }
-  </style>
+  .workspace {
+    margin: 25px 15px;
+    padding: 20px;
+  }
+}
+</style>
 </head>
 
 <body>
 
 <header>
   <div class="logo">Clip<span>Genius</span> AI</div>
-  <div>✦ AI VIDEO CLIPPER</div>
+  <div>✦ AI CLIPPER</div>
 </header>
 
 <section class="hero">
-  <div class="tag">✦ AI-Powered Video Intelligence</div>
+
+  <div class="tag">✦ AI-Powered Video Clipping</div>
 
   <h1>
     Turn Long Videos Into<br>
@@ -191,38 +182,29 @@
   </h1>
 
   <p class="subtitle">
-    Let AI discover your video's best moments,
-    automatically create short clips and prepare
-    them for TikTok, YouTube Shorts and Reels.
+    Paste your video link and let artificial intelligence
+    discover the best moments and automatically create
+    short videos for your social media.
   </p>
+
 </section>
 
 <section class="workspace">
+
   <label for="videoUrl">Paste your video link</label>
 
   <input
     type="url"
     id="videoUrl"
-    placeholder="Paste YouTube or supported video URL..."
+    placeholder="https://www.youtube.com/watch?v=..."
   >
 
-  <button class="primary" onclick="analyzeVideo()">
-    ✦ Find Best Moments
+  <button id="startButton" onclick="startClipping()">
+    ✂ Start Clipping
   </button>
-
-  <button class="upload" onclick="document.getElementById('videoFile').click()">
-    ↑ Upload a Video
-  </button>
-
-  <input
-    type="file"
-    id="videoFile"
-    accept="video/*"
-    hidden
-    onchange="showFile()"
-  >
 
   <p id="status"></p>
+
 </section>
 
 <section class="features">
@@ -230,19 +212,19 @@
   <div class="feature">
     <div>🧠</div>
     <h3>AI Detection</h3>
-    <p>Discover interesting moments in your videos.</p>
+    <p>AI discovers the most interesting moments.</p>
   </div>
 
   <div class="feature">
     <div>✂️</div>
-    <h3>Smart Clipping</h3>
-    <p>Turn long videos into short-form content.</p>
+    <h3>Automatic Clipping</h3>
+    <p>Automatically turns selected moments into clips.</p>
   </div>
 
   <div class="feature">
     <div>⚡</div>
     <h3>Ready to Edit</h3>
-    <p>Preview and prepare clips for your social platforms.</p>
+    <p>Preview, edit and download your finished clips.</p>
   </div>
 
 </section>
@@ -252,27 +234,37 @@
 </footer>
 
 <script>
-  function analyzeVideo() {
-    const url = document.getElementById("videoUrl").value;
-    const status = document.getElementById("status");
+async function startClipping() {
 
-    if (!url) {
-      status.textContent = "Please paste a video link first.";
-      return;
-    }
+  const url = document.getElementById("videoUrl").value.trim();
+  const status = document.getElementById("status");
+  const button = document.getElementById("startButton");
 
-    status.textContent =
-      "Video submission interface ready. AI processing will be connected in the next stages.";
+  if (!url) {
+    status.textContent = "Please paste your video link.";
+    return;
   }
 
-  function showFile() {
-    const file = document.getElementById("videoFile").files[0];
+  try {
+    const parsedUrl = new URL(url);
 
-    if (file) {
-      document.getElementById("status").textContent =
-        "Selected video: " + file.name;
+    if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+      throw new Error("Invalid link");
     }
+  } catch {
+    status.textContent = "Please enter a valid video link.";
+    return;
   }
+
+  button.disabled = true;
+  button.textContent = "Preparing AI Clipper...";
+  status.textContent =
+    "Your video link has been received. AI processing will be connected next.";
+
+  // Actual AI processing will be connected to our backend.
+  button.disabled = false;
+  button.textContent = "✂ Start Clipping";
+}
 </script>
 
 </body>
